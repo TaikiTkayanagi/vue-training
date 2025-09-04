@@ -1,20 +1,30 @@
-<script lang="ts" setup>
-import { computed, reactive } from 'vue';
-
-const data = reactive({redis: 0, pi: 3.14})
-
-const changeTime = () => {
-  data.redis = Math.round(Math.random() * 10);
-};
-const result = computed(() => {
-  return data.redis * 2 * data.pi;
-});  
-
-setInterval(changeTime, 1000);
+<script setup lang="ts">
+import { ref } from 'vue';
+const msg = ref('Hello Vue 3 + Vite + TypeScript');
+const isTextColor = ref(true);
+const isBgColorBlue = ref(false);
+const style = ref({
+  textColor: true,
+  bgColorBlue: false
+})
 </script>
 
 <template>
-  <div>
-    <h1>{{ data.redis }}の円周率は{{ result }}</h1>
-  </div>
+  <p v-bind:class="{ textColor: isTextColor, bgColorBlue: isBgColorBlue }">{{ msg }} </p>
+  <p v-bind:classe="style">{{ msg }} </p>
+  <p v-bind:class="{ 'test-test': true }">{{ msg }} </p>
 </template>
+
+<style>
+.textColor {
+  color: red;
+}
+
+.bgColorBlue {
+  background-color: blue;
+}
+
+.test-test {
+  background-color: blue;
+}
+</style>
