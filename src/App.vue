@@ -1,59 +1,29 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import { computed, ref } from 'vue';
+import OneMember from './components/OneMember.vue';
 
-interface item {
+interface Person {
   name: string,
-  price: number
+  point: number,
+  note?: string
 }
 
-const itemMap = ref(new Map<number, item>());
-itemMap.value.set(1, {name: "ホワイトレディ", price: 1200})
-itemMap.value.set(2, {name: "ブルーハワイ", price: 1500})
-itemMap.value.set(3, {name: "マティーニ", price: 1500})
-
-const itemOver1500 = computed(() => {
-  var result = new Map<number, item>();
-  itemMap.value.forEach((v, key) => {
-    if(v.price >= 1500) {
-      result.set(key, v)
-    }
-  })
+const map = ref(new Map<number, Person>());
+map.value.set(1, {name: "t1", point: 1, note: undefined})
+map.value.set(2, {name: "t2", point: 10, note: "2回目"})
+map.value.set(3, {name: "t3", point: 30, note: "初回"})
+const total = computed(() => {
+  let result = 0;
+  map.value.forEach((value) => result += value.point);
   return result;
 })
 
-const onClick = () => {
-  itemMap.value.set(4, {name: "ビール", price: 1700});
-}
-
-const onClickChangePrice = () => {
-  itemMap.value.forEach((value, id) => {
-    if(value.price >= 1500) {
-      value.price = 1000
-    } else {
-      value.price = 2000
-    }
-  })
-}
-
-const onClickChangeWhiteLedy = () => {
-  const whiteLedy = itemMap.value.get(1) as item
-  whiteLedy.price = 3000
-}
 </script>
 
 <template>
+  <p>合計値: {{ total }}</p>
   <ul>
-    <li v-for="[key, value] in itemMap">
-      <p>id: {{ key }}  名前: {{ value.name }}  値段: {{ value.price }}</p>
-    </li>
+    <OneMember v-for="[key, value] in map" v-model:point="value.point" v-bind:key="key" 
+    :id="key" :name="value.name" :note="value.note"/>
   </ul>
-  <p>値段が1500円以上のもの</p>
-  <ul>
-    <li v-for="[key, value] in itemOver1500">
-      <p>id: {{ key }}  名前: {{ value.name }}  値段: {{ value.price }}</p>
-    </li>
-  </ul>
-  <button v-on:click="onClick">ビールを追加</button>
-  <button v-on:click="onClickChangePrice">値段を変更</button>
-  <button v-on:click="onClickChangeWhiteLedy">ホワイトレディの値段変更</button>
 </template>
