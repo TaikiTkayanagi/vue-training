@@ -1,30 +1,25 @@
 <script setup lang="ts">
+import type { Person } from '@/App.vue';
+import { computed, inject } from 'vue';
+
 interface Props {
-    id: number,
-    name: string,
-    point: number,
-    note?: string
-}
-interface Emit {
-    (event: "update:point", newPoint: number): void
+    id: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    note: "---"
-})
-
-const emit = defineEmits<Emit>();
-
+const props = defineProps<Props>()
+const map = inject("map", new Map<number, Person>())
+const person = computed(() => map.get(props.id) as Person)
 const addPoint = () => {
-    emit("update:point", props.point + 1);
+    person.value.point += 1 
 }
+
 </script>
 
 <template>
     <div>
-        <p>名前: {{ name }}</p>
-        <p>ポイント: {{ point }}</p>
-        <p>備考: {{ note }}</p>
-        <button v-on:click="addPoint">ポイントを加算</button>
+        <p>名前: {{ person.name }}</p>
+        <p>ポイント: {{ person.point }}</p>
+        <p>備考: {{ person.note }}</p>
+        <input type="number" v-model.number="person.point" />
     </div>
 </template>

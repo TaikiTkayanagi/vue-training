@@ -1,29 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import OneMember from './components/OneMember.vue';
+import { computed, provide, reactive, ref } from 'vue';
+import Middle from './components/Middle.vue';
 
-interface Person {
+export interface Person {
   name: string,
   point: number,
   note?: string
 }
 
-const map = ref(new Map<number, Person>());
-map.value.set(1, {name: "t1", point: 1, note: undefined})
-map.value.set(2, {name: "t2", point: 10, note: "2回目"})
-map.value.set(3, {name: "t3", point: 30, note: "初回"})
-const total = computed(() => {
-  let result = 0;
-  map.value.forEach((value) => result += value.point);
-  return result;
-})
+const map = reactive(new Map<number, Person>());
+map.set(1, {name: "t1", point: 1, note: undefined})
+map.set(2, {name: "t2", point: 10, note: "2回目"})
+map.set(3, {name: "t3", point: 30, note: "初回"})
+provide("map", map);
+
+setInterval(() => map.set(3, {name: "t4", point: 130, note: "初回"}), 10000);
 
 </script>
 
 <template>
-  <p>合計値: {{ total }}</p>
-  <ul>
-    <OneMember v-for="[key, value] in map" v-model:point="value.point" v-bind:key="key" 
-    :id="key" :name="value.name" :note="value.note"/>
-  </ul>
+  <Middle />
 </template>
