@@ -1,23 +1,32 @@
 <script setup lang="ts">
-import { computed, provide, reactive, ref } from 'vue';
-import Middle from './components/Middle.vue';
+import { ref, shallowRef } from 'vue';
+import CustomCheckBox from './components/CustomCheckBox.vue';
+import CustomRadio from './components/CustomRadio.vue';
+import CustomSelectBox from './components/CustomSelectBox.vue';
 
-export interface Person {
-  name: string,
-  point: number,
-  note?: string
+const components = [CustomCheckBox, CustomRadio, CustomSelectBox];
+const names = ["CustomCheckBox", "CustomRadio", "CustomSelectBox"];
+let index = 0;
+const currentComponent = shallowRef(components[index]);
+const componentName = ref(names[index]);
+
+const onClick = () => {
+  index++; 
+  if(index == 3) {
+    index = 0;
+  }
+  currentComponent.value = components[index];
+  componentName.value = names[index];
 }
-
-const map = reactive(new Map<number, Person>());
-map.set(1, {name: "t1", point: 1, note: undefined})
-map.set(2, {name: "t2", point: 10, note: "2回目"})
-map.set(3, {name: "t3", point: 30, note: "初回"})
-provide("map", map);
-
-setInterval(() => map.set(3, {name: "t4", point: 130, note: "初回"}), 10000);
-
 </script>
 
 <template>
-  <Middle />
+  <div>
+    <h1>{{ componentName }}</h1>
+    <keep-alive>
+      <component v-bind:is="currentComponent" />
+    </keep-alive>
+    <button v-on:click="onClick">クリック</button>
+  </div>
+
 </template>
