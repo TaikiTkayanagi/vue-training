@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import type Member from '@/interface/Member';
-import { inject } from 'vue';
+import { useMembersStore } from '@/stores/members';
 
-const memberList = inject("memberList") as Map<number, Member>
+const membersStore = useMembersStore();
+membersStore.getLolcalStorage()
 </script>
 
 <template>
-    <div>会員</div>
-    <ul>
-        <li v-for="[key, value] in memberList" :key="key">
-            {{ value.name }}
-            <RouterLink :to="{name: 'detail', params: {id: key}}" >詳細</RouterLink>
-        </li>
-    </ul>
+    <template v-if="membersStore.isEmpty()">
+        <p>登録されていません</p>
+    </template>
+    <template v-else>
+        <div>会員</div>
+        <ul>
+            <li v-for="[key, value] in membersStore.members" :key="key">
+                {{ value.name }}
+                <RouterLink :to="{ name: 'detail', params: { id: key } }">詳細</RouterLink>
+            </li>
+        </ul>
+    </template>
 </template>
