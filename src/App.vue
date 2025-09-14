@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { provide, reactive } from 'vue';
-import type Member from './interface/Member';
+import { computed, ref } from 'vue';
+import { useCounterStore } from './stores/counter';
 
-const memberList = new Map<number, Member>();
-memberList.set(1, {name: "test"});
-memberList.set(2, {name: "test2"});
-memberList.set(3, {name: "test3"});
-provide("memberList", reactive(memberList));
+const counterStore = useCounterStore();
+
 </script>
 
 <template>
   <div>
-    <h1>Vue Routerサンプル</h1>
-    <RouterView />
+    <p>現在のポイント: {{ counterStore.counter }}</p>
+    <p>現在のポイントさらに倍: {{ counterStore.doubleCount }}</p>
+    <button v-on:click="counterStore.increment">加算</button>
   </div>
 </template>
