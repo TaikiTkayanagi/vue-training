@@ -5,10 +5,10 @@ import { useMembersStore } from '@/stores/members';
 import { reactive } from 'vue';
 
 const membersStore = useMembersStore();
-const newMember: Member = reactive({name: ""})
+const newMember: Member = reactive({id: 0,name: ""})
 
-const onClick = () => {
-    membersStore.add(newMember);
+const onClick = async() => {
+    await membersStore.add(newMember);
     router.push({name: "memberList"})
 }
 </script>

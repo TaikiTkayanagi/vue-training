@@ -2,7 +2,7 @@
 import { useMembersStore } from '@/stores/members';
 
 const membersStore = useMembersStore();
-membersStore.getLolcalStorage()
+membersStore.getLocalStorage()
 </script>
 
 <template>
